@@ -1769,3 +1769,38 @@ print(1)
 | 指针在结尾 |      |      |      |      |  +   |  +   |
 
 在我们成功创建一个file对象后，可以使用`read()`方法读取文件的全部内容，`write(str)`方法向文件中写入字符串，`close()`来关闭打开的文件。
+
+比如有一个1.txt文件，文件内容如下
+
+```ascii
+hello,python
+```
+
+我们尝试读写文件内容
+
+```python
+file = open('1.txt', 'r') # 获得文件指针，模式为只读（r）
+content = file.read()
+print(content)
+
+# 如果我们这时候尝试使用file.write()来进行写入，解释器会抛出错误。我们需要用写入方式打开文件
+extraContent = "Python"
+# file.write(extraContent)
+file = open('1.txt', 'w')
+file.write(extraContent)
+# 到这一步再次查看文件内容，发现原来的内容消失了，文件中仅有Python这个字符串。
+
+# 接下来我们用追加模式（a）打开文件
+extraContent = "Python"
+file = open('1.txt', 'a')
+file.write(extraContent)
+# 再次查看文件内容，发现文件内容变为PythonPython。
+```
+
+r，w，a三种模式基本逻辑就是：
+
+- r只读，仅能读取，不能写入。在创建文件对象时如果源文件不存在抛出错误。
+- w只写，仅能写入，不能读取。不论源文件是否存在在创建文件对象时一定会创建空文件进行覆盖，从文件的开头开始写入。
+- a追加写，仅能写入，不能读取。在创建文件对象时如果源文件存在则直接打开，如果不存在则直接创建文件并打开。从文件末尾写入。
+
+> 大部分时间我推荐使用a的方式来写入文件，可以有效避免误操作导致原文件内容离奇消失。
